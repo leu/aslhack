@@ -21,7 +21,7 @@ export default function Quiz() {
                 })
                 .then(function(stream) {
                     video.srcObject = stream;
-                    video.play();
+                    video.play().catch(() => {});
                 })
                 .catch(function(err) {
                     console.log("An error occurred: " + err);
@@ -75,7 +75,6 @@ export default function Quiz() {
             }
         }
 
-        // window.addEventListener('load', startup, false);
         startup()
     }, [])
       
@@ -84,9 +83,6 @@ export default function Quiz() {
       <main className={`flex min-h-screen flex-col items-center p-24`}>
         <div>What's the sign for "{word}"? Show it into your camera.</div>
         <div className="contentarea">
-            <h1>
-                Using Javascript to capture Photo
-            </h1>
             <div className="camera">
                 <video id="video">Video stream not available.</video>
             </div>
