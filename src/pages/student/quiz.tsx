@@ -80,18 +80,19 @@ export default function Quiz() {
       
 
     return (
-      <main className={`flex min-h-screen flex-col items-center p-24`}>
-        <div>What's the sign for "{word}"? Show it into your camera.</div>
+      <main className={`flex min-h-screen flex-col items-center p-20`}>
+        <div className="mb-4 w-screen px-4 sm:text-center">What's the sign for "{word}"? Show it into your camera.</div>
         <div className="contentarea">
-            <div className="camera">
+            <div className="camera inline mb-2">
                 <video id="video">Video stream not available.</video>
             </div>
-            <div><button id="startbutton">Take photo</button></div>
-            
+
             <canvas id="canvas"></canvas>
-            <div className="output">
+            <div className="output inline mb-2">
                 <img id="photo" alt="The screen capture will appear in this box." /> 
             </div>
+
+            <div className="flex justify-center mt-4"><button id="startbutton" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Take photo</button></div>
         </div>
       </main>
   );
