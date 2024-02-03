@@ -25,7 +25,7 @@ export default function Stats() {
 
     return (
       <main className={`flex min-h-screen flex-col items-center p-24`}>
-        <div className="bg-orange-600 py-2 px-12 w-72 rounded-lg">Classroom ID: {code}</div>
+        <div className="bg-orange-600 py-2 px-12 w-72 rounded-lg">Quiz ID: {code}</div>
         <div className="mt-6">Student Averages</div>
         {studentAverage.map((studentAvg: { student: string; score: string; }) => (
             <div>{studentAvg.student + ": " + studentAvg.score + "%"}</div>

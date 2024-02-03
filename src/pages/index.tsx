@@ -9,7 +9,8 @@ export default function Home() {
         </div>
       </a>
       <div className="mb-6">OR</div>
-      <input type="text" className="mb-4 text-black w-60 h-8 px-2 mt-2" placeholder="Classroom ID"/>
+      <input type="text" className="mb-0 text-black w-60 h-8 px-2 mt-2" placeholder="Quiz ID"/>
+      <input type="text" className="mb-4 text-black w-60 h-8 px-2 mt-2" placeholder="Your Name"/>
       <a href="/student/quiz">
         <div className={`text-xl font-bold bg-orange-600 text-white border-orange-950 border-0 px-6 py-4 rounded-lg w-60`}>
           Take Quiz
