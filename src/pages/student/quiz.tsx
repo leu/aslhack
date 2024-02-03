@@ -79,7 +79,7 @@ export default function Quiz() {
     }, [])
 
     function fetchAnswer() {
-        const correct = true
+        const correct = false
 
         if (correct) {
             const correct_sign = document.getElementById("correct_sign")!
@@ -92,7 +92,15 @@ export default function Quiz() {
             const submit = document.getElementById("submit")! as HTMLButtonElement
             submit.disabled = true;
         } else {
+            const wrong_sign = document.getElementById("wrong_sign")!
+            wrong_sign.hidden = false;
+            const next_button = document.getElementById("next_button")!
+            next_button.hidden = false;
 
+            const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
+            take_photo.disabled = true;
+            const submit = document.getElementById("submit")! as HTMLButtonElement
+            submit.disabled = true;
         }
     }
 
@@ -116,6 +124,8 @@ export default function Quiz() {
         clearphoto()
         const correct_sign = document.getElementById("correct_sign")!
         correct_sign.hidden = true;
+        const wrong_sign = document.getElementById("wrong_sign")!
+        wrong_sign.hidden = true;
         const next_button = document.getElementById("next_button")!
         next_button.hidden = true;
 
@@ -142,6 +152,7 @@ export default function Quiz() {
             <div className="flex justify-center mt-4"><button id="startbutton" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Take photo</button></div>
             <div className="flex justify-center mt-4"><button id="submit" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchAnswer}>Submit Answer</button></div>
             <div className="flex justify-center mt-10"><button id="correct_sign" className="bg-green-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Correct!</button></div>
+            <div className="flex justify-center mt-10"><button id="wrong_sign" className="bg-red-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Wrong!</button></div>
             <div className="flex justify-center mt-4"><button id="next_button" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchNextQuestion} hidden>Next</button></div>
         </div>
       </main>
