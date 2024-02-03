@@ -1,5 +1,6 @@
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
+const { v4: uuidv4 } = require('uuid');
 
 export default function QuizSetup() {
     const [questions, setQuestions] = useState(["Boat", "Hello"]);
@@ -14,6 +15,12 @@ export default function QuizSetup() {
         const newQuestions = [...questions]
         newQuestions.push("")
         setQuestions(newQuestions)
+    }
+
+    function createQuiz() {
+        const code = uuidv4().substring(0, 5);
+        localStorage.setItem("code", code);
+        window.location.href = "/teacher/stats"
     }
 
     return (
@@ -43,6 +50,8 @@ export default function QuizSetup() {
             </div>
         </div>
         {questions}
+
+        <button onClick={createQuiz} className="mx-auto my-4 w-32 py-2 px-2 bg-white text-black rounded-lg">Create</button>
       </main>
   );
 }
