@@ -1,16 +1,6 @@
-#torch
-import torch
 from torch.nn import Conv2d, MaxPool2d
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-from torch.utils.data import DataLoader
-from torch.utils.data import sampler
-from torchvision import datasets, transforms
-from torchvision.utils import save_image, make_grid
-#other
-import matplotlib.pyplot as plt
-import numpy as np
 
 # define resnet building blocks
 
