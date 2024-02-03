@@ -1,5 +1,5 @@
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const { v4: uuidv4 } = require('uuid');
 
 export default function QuizSetup() {
@@ -19,7 +19,9 @@ export default function QuizSetup() {
 
     function createQuiz() {
         const code = uuidv4().substring(0, 5);
-        localStorage.setItem("code", code);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("code", code);
+          }          
         window.location.href = "/teacher/stats"
     }
 
