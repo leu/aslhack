@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Quiz() {
-    const word: string = "Car";
+    const [word, setWord] = useState("Car")
 
     useEffect(() => {
         var width = 320; // We will scale the photo width to this
@@ -77,6 +77,53 @@ export default function Quiz() {
 
         startup()
     }, [])
+
+    function fetchAnswer() {
+        const correct = true
+
+        if (correct) {
+            const correct_sign = document.getElementById("correct_sign")!
+            correct_sign.hidden = false;
+            const next_button = document.getElementById("next_button")!
+            next_button.hidden = false;
+
+            const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
+            take_photo.disabled = true;
+            const submit = document.getElementById("submit")! as HTMLButtonElement
+            submit.disabled = true;
+        } else {
+
+        }
+    }
+
+    function fetchNextQuestion() {
+        if (word === "Car") { 
+            setWord("Goat")
+        } else {
+            setWord("Car")
+        }
+        function clearphoto() {
+            var canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement;
+            var photo: HTMLImageElement = document.getElementById('photo') as HTMLImageElement;
+
+            var context = canvas.getContext('2d')!;
+            context.fillStyle = "#AAA";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            var data = canvas.toDataURL('image/png');
+            photo.setAttribute('src', data);
+        }
+        clearphoto()
+        const correct_sign = document.getElementById("correct_sign")!
+        correct_sign.hidden = true;
+        const next_button = document.getElementById("next_button")!
+        next_button.hidden = true;
+
+        const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
+        take_photo.disabled = false;
+        const submit = document.getElementById("submit")! as HTMLButtonElement
+        submit.disabled = false;
+    }
       
 
     return (
@@ -93,6 +140,9 @@ export default function Quiz() {
             </div>
 
             <div className="flex justify-center mt-4"><button id="startbutton" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Take photo</button></div>
+            <div className="flex justify-center mt-4"><button id="submit" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchAnswer}>Submit Answer</button></div>
+            <div className="flex justify-center mt-10"><button id="correct_sign" className="bg-green-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Correct!</button></div>
+            <div className="flex justify-center mt-4"><button id="next_button" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchNextQuestion} hidden>Next</button></div>
         </div>
       </main>
   );
