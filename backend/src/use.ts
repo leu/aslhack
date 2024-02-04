@@ -55,8 +55,6 @@ module.exports = function(app: Application) {
             })
         }
 
-        const val = Math.random()
-
         // check word and file against model
         const correct = Math.random() < 0.5
 
