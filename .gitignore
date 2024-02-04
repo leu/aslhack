@@ -5,6 +5,7 @@ logs
 
 # dependencies
 */node_modules
+__pycache__/
 */.pnp
 .pnp.js
 .yarn/install-state.gz
