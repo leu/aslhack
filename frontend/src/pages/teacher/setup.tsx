@@ -1,7 +1,6 @@
 import { fetchCreateQuiz } from "@/lib/backend/create";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
-const { v4: uuidv4 } = require('uuid');
 
 export default function QuizSetup() {
     const [questions, setQuestions] = useState(["Boat", "Hello"]);
