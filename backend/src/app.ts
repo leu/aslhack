@@ -20,6 +20,7 @@ app.use(function(req, res, next) {
 
 // Use endpoints in these files
 require('./error-handler')
+require('./create')(app)
 
 var server: Server
 
@@ -28,6 +29,8 @@ if (process.env.NODE_ENV === 'development') {
   server = app.listen(port, () => {
     logger.info(`Server is listening on port ${port}.`);
   });
+
+  console.log(app._router.stack)
 } else { 
 	// server listens on http
 	server = app.listen(port, () => {

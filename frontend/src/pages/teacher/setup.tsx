@@ -1,9 +1,11 @@
-import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useEffect, useState } from "react";
+import { fetchCreateQuiz } from "@/lib/backend/create";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useState } from "react";
 const { v4: uuidv4 } = require('uuid');
 
 export default function QuizSetup() {
     const [questions, setQuestions] = useState(["Boat", "Hello"]);
+    const [message, setMessage] = useState('')
 
     function updateQuestions(newString: string, index: number) {
         const newQuestions = [...questions]
@@ -17,12 +19,16 @@ export default function QuizSetup() {
         setQuestions(newQuestions)
     }
 
-    function createQuiz() {
-        const code = uuidv4().substring(0, 5);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem("code", code);
-          }          
-        window.location.href = "/teacher/stats"
+    const createQuiz = async () => {
+        const myJson = await fetchCreateQuiz(questions)
+		
+		if (myJson.error) {
+			setMessage(myJson.error)
+		} else {
+			setMessage('')
+			localStorage.setItem("code", myJson.code)
+            window.location.href = "/teacher/stats"
+		}
     }
 
     return (
@@ -54,6 +60,7 @@ export default function QuizSetup() {
         {questions}
 
         <button onClick={createQuiz} className="mx-auto my-4 w-32 py-2 px-2 bg-white text-black rounded-lg">Create</button>
+        <div className={`text-red-600 font-semibold mt-3 text-center`}>{message}</div>
       </main>
   );
 }

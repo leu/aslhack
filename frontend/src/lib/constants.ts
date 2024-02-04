@@ -1,0 +1,1 @@
+export const backend_ip = process.env.NODE_ENV === "production" ? 'https://discordfox.com:3001' : 'http://localhost:3001'
