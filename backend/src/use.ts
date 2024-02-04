@@ -40,6 +40,12 @@ module.exports = function(app: Application) {
         `)[0].scores
 
         const not_done_words = Object.keys(scores).filter(word => (scores[word] === null))
+
+        if (not_done_words.length == 0) {
+            res.send({
+                finished: "Finished"
+            })
+        }
         
         res.send({
             nextWord: not_done_words[0]

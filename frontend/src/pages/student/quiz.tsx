@@ -10,6 +10,9 @@ export default function Quiz() {
     useEffect(() => {
         const fetchFirstWord = async () => {
             const firstWord = await fetchNextWord(localStorage.getItem("quiz_id")!, localStorage.getItem("name")!)
+            if (firstWord.finished) {
+                window.location.href = "/student/finished"
+            }
 
             setWord(firstWord.nextWord)
         }
@@ -178,6 +181,9 @@ export default function Quiz() {
     function fetchNextQuestion() {
         const fetchFirstWord = async () => {
             const nextWord = await fetchNextWord(localStorage.getItem("quiz_id")!, localStorage.getItem("name")!)
+            if (nextWord.finished) {
+                window.location.href = "/student/finished"
+            }
 
             setWord(nextWord.nextWord)
         }
