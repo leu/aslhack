@@ -45,9 +45,14 @@ export default function QuizSetup() {
                         onChange={e => {if (e != null) updateQuestions(e.target.value, i)}}
                         className="bg-white"
                     >
-                        <MenuItem value="Hello">Hello</MenuItem>
-                        <MenuItem value="Boat">Boat</MenuItem>
-                        <MenuItem value="Menu">Menu</MenuItem>
+                        <MenuItem value="A">A</MenuItem>
+                        <MenuItem value="B">B</MenuItem>
+                        <MenuItem value="C">C</MenuItem>
+                        <MenuItem value="D">D</MenuItem>
+                        <MenuItem value="E">E</MenuItem>
+                        <MenuItem value="I love you">I love you</MenuItem>
+                        <MenuItem value="Water">Water</MenuItem>
+                        <MenuItem value="Why">Why</MenuItem>
                     </Select>
                 </FormControl>
             </div>))

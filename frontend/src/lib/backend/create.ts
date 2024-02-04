@@ -12,3 +12,13 @@ export async function fetchCreateQuiz(words: string[]) {
 	});
 	return await response.json();
 }
+
+export async function fetchStats() {
+	const response = await fetch(`${backend_ip}/scores`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	return await response.json();
+}
