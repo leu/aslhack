@@ -1,8 +1,11 @@
 import { fetchNextWord } from "@/lib/backend/use";
 import { useEffect, useState } from "react";
+import imageCompression from 'browser-image-compression'
+import { backend_ip } from "@/lib/constants";
 
 export default function Quiz() {
     const [word, setWord] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     useEffect(() => {
         const fetchFirstWord = async () => {
@@ -13,6 +16,89 @@ export default function Quiz() {
 
         fetchFirstWord()
     }, [])
+
+    useEffect(() => {
+		const form = document.querySelector('form')!
+		form.addEventListener('submit', handleSubmit);
+
+		/** @param {Event} event */
+		async function handleSubmit(event: Event) {
+			event.preventDefault();
+
+			const url = new URL(form.action);
+			const formData = new FormData(form);
+
+            var photo: HTMLImageElement = document.getElementById('photo') as HTMLImageElement;
+
+            const response = await fetch(photo.src);
+            // here image is url/location of image
+            const blob = await response.blob();
+            const file = new File([blob], 'image.jpg', {type: blob.type});
+
+			const options = {
+				maxSizeMB: 1,
+				maxWidthOrHeight: 1920,
+				useWebWorker: true,
+			}
+			try {
+				setErrorMessage("Compressing images! (1/2)")
+
+				const compressed_file = await imageCompression(file, options);
+
+				// compressed files lose file type info for some reason; recover file type info below.
+
+				const named_compressed_file = new File(
+						[await compressed_file.arrayBuffer()], 
+						file.name,
+						{type: file.type, lastModified: file.lastModified}
+					)
+
+				formData.set("image", named_compressed_file)
+                formData.set("quiz_id", localStorage.getItem("quiz_id")!)
+                formData.set("name", localStorage.getItem("name")!)
+                formData.set("word", word)
+			} catch (error) {
+				console.log(error);
+			}
+		
+			/** @type {Parameters<fetch>[1]} */
+			const fetchOptions = {
+				method: form.method,
+				body: formData,
+				// headers: {
+				// 	'authorization': localStorage.getItem("token")
+				// }
+			};
+
+			setErrorMessage("Uploading files! Please wait. (2/2)")
+		
+			const myJson = await (await fetch(url, fetchOptions)).json();
+			
+			if (myJson.error) {
+				setErrorMessage(myJson.error)
+			} else {
+                setErrorMessage("")
+                const correct_sign = document.getElementById("correct_sign")!
+                const wrong_sign = document.getElementById("wrong_sign")!
+                const next_button = document.getElementById("next_button")!
+                const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
+                const submit = document.getElementById("submit")! as HTMLButtonElement
+
+                if (myJson.correct) {
+                    correct_sign.hidden = false;
+                    wrong_sign.hidden = true;
+                    next_button.hidden = false;
+                } else {
+                    wrong_sign.hidden = false;
+                    correct_sign.hidden = true;
+                    next_button.hidden = false;
+                }
+
+                take_photo.disabled = true;
+                submit.disabled = true;
+			}
+		}
+	}, [word])
 
     useEffect(() => {
         var width = 320; // We will scale the photo width to this
@@ -89,32 +175,6 @@ export default function Quiz() {
         startup()
     }, [])
 
-    function fetchAnswer() {
-        const correct = false
-
-        if (correct) {
-            const correct_sign = document.getElementById("correct_sign")!
-            correct_sign.hidden = false;
-            const next_button = document.getElementById("next_button")!
-            next_button.hidden = false;
-
-            const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
-            take_photo.disabled = true;
-            const submit = document.getElementById("submit")! as HTMLButtonElement
-            submit.disabled = true;
-        } else {
-            const wrong_sign = document.getElementById("wrong_sign")!
-            wrong_sign.hidden = false;
-            const next_button = document.getElementById("next_button")!
-            next_button.hidden = false;
-
-            const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
-            take_photo.disabled = true;
-            const submit = document.getElementById("submit")! as HTMLButtonElement
-            submit.disabled = true;
-        }
-    }
-
     function fetchNextQuestion() {
         const fetchFirstWord = async () => {
             const nextWord = await fetchNextWord(localStorage.getItem("quiz_id")!, localStorage.getItem("name")!)
@@ -164,10 +224,13 @@ export default function Quiz() {
             </div>
 
             <div className="flex justify-center mt-4"><button id="startbutton" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Take photo</button></div>
-            <div className="flex justify-center mt-4"><button id="submit" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchAnswer}>Submit Answer</button></div>
+            <form method="post" action={backend_ip + "/oracle"} encType="multipart/form-data">
+                <div className="flex justify-center mt-4"><button type="submit" id="submit" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Submit Answer</button></div>
+            </form>
             <div className="flex justify-center mt-10"><button id="correct_sign" className="bg-green-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Correct!</button></div>
             <div className="flex justify-center mt-10"><button id="wrong_sign" className="bg-red-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Wrong!</button></div>
             <div className="flex justify-center mt-4"><button id="next_button" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchNextQuestion} hidden>Next</button></div>
+            <p className="red">{errorMessage}</p>
         </div>
       </main>
   );
