@@ -81,7 +81,6 @@ export default function Quiz() {
                 const correct_sign = document.getElementById("correct_sign")!
                 const wrong_sign = document.getElementById("wrong_sign")!
                 const next_button = document.getElementById("next_button")!
-                const take_photo = document.getElementById("startbutton")! as HTMLButtonElement
                 const submit = document.getElementById("submit")! as HTMLButtonElement
 
                 if (myJson.correct) {
@@ -94,7 +93,6 @@ export default function Quiz() {
                     next_button.hidden = false;
                 }
 
-                take_photo.disabled = true;
                 submit.disabled = true;
 			}
 		}
@@ -109,7 +107,7 @@ export default function Quiz() {
         var video: HTMLVideoElement = document.getElementById('video') as HTMLVideoElement;
         var canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement;
         var photo: HTMLImageElement = document.getElementById('photo') as HTMLImageElement;
-        var startbutton: HTMLButtonElement = document.getElementById('startbutton') as HTMLButtonElement;
+        // var startbutton: HTMLButtonElement = document.getElementById('startbutton') as HTMLButtonElement;
 
         function startup() {
             navigator.mediaDevices.getUserMedia({
@@ -136,16 +134,22 @@ export default function Quiz() {
                     video.setAttribute('height', height.toString());
                     canvas.setAttribute('width', width.toString());
                     canvas.setAttribute('height', height.toString());
+                    takevideo();
                     streaming = true;
+
                 }
             }, false);
 
-            startbutton!.addEventListener('click', function(ev) {
-                takepicture();
-                ev.preventDefault();
-            }, false);
+            // startbutton!.addEventListener('click', function(ev) {
+            //     takepicture();
+            //     ev.preventDefault();
+            // }, false);
 
-            clearphoto();
+            // clearphoto();
+        }
+
+        function delay(ms: number) {
+            return new Promise( resolve => setTimeout(resolve, ms) );
         }
 
 
@@ -158,18 +162,20 @@ export default function Quiz() {
             photo.setAttribute('src', data);
         }
 
-        function takepicture() {
+        async function takevideo() {
             var context = canvas.getContext('2d')!;
-            if (width && height) {
-                canvas.width = width;
-                canvas.height = height;
-                context.drawImage(video, 0, 0, width, height);
-
-                var data = canvas.toDataURL('image/png');
-                photo.setAttribute('src', data);
-            } else {
-                clearphoto();
-            }
+            for (let i = 0; i < 8; i++) {
+                if (width && height) {
+                    canvas.width = width;
+                    canvas.height = height;
+                    context.drawImage(video, 0, 0, width, height);
+                    var data = canvas.toDataURL('image'+i+'/png');
+                    photo.setAttribute('src', data);
+                } else {
+                    clearphoto();
+                }
+                await delay(10);
+        }
         }
 
         startup()
@@ -217,16 +223,7 @@ export default function Quiz() {
             <div className="camera inline mb-2">
                 <video id="video">Video stream not available.</video>
             </div>
-
             <canvas id="canvas"></canvas>
-            <div className="output inline mb-2">
-                <img id="photo" alt="The screen capture will appear in this box." /> 
-            </div>
-
-            <div className="flex justify-center mt-4"><button id="startbutton" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Take photo</button></div>
-            <form method="post" action={backend_ip + "/oracle"} encType="multipart/form-data">
-                <div className="flex justify-center mt-4"><button type="submit" id="submit" className="bg-orange-600 py-2 px-6 font-bold rounded-lg">Submit Answer</button></div>
-            </form>
             <div className="flex justify-center mt-10"><button id="correct_sign" className="bg-green-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Correct!</button></div>
             <div className="flex justify-center mt-10"><button id="wrong_sign" className="bg-red-600 py-2 px-6 font-bold rounded-lg" disabled hidden>Wrong!</button></div>
             <div className="flex justify-center mt-4"><button id="next_button" className="bg-orange-600 py-2 px-6 font-bold rounded-lg" onClick={fetchNextQuestion} hidden>Next</button></div>
