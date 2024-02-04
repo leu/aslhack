@@ -13,6 +13,8 @@ export default function Home() {
 			setMessage(myJson.error)
 		} else {
 			setMessage('')
+      localStorage.setItem("quiz_id", quiz_id_element.value)
+      localStorage.setItem("name", name_element.value)
       window.location.href = "/student/quiz"
 		}
   }

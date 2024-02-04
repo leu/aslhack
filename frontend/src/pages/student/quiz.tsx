@@ -1,7 +1,18 @@
+import { fetchNextWord } from "@/lib/backend/use";
 import { useEffect, useState } from "react";
 
 export default function Quiz() {
-    const [word, setWord] = useState("Car")
+    const [word, setWord] = useState("")
+
+    useEffect(() => {
+        const fetchFirstWord = async () => {
+            const firstWord = await fetchNextWord(localStorage.getItem("quiz_id")!, localStorage.getItem("name")!)
+
+            setWord(firstWord.nextWord)
+        }
+
+        fetchFirstWord()
+    }, [])
 
     useEffect(() => {
         var width = 320; // We will scale the photo width to this
@@ -105,11 +116,14 @@ export default function Quiz() {
     }
 
     function fetchNextQuestion() {
-        if (word === "Car") { 
-            setWord("Goat")
-        } else {
-            setWord("Car")
+        const fetchFirstWord = async () => {
+            const nextWord = await fetchNextWord(localStorage.getItem("quiz_id")!, localStorage.getItem("name")!)
+
+            setWord(nextWord.nextWord)
         }
+
+        fetchFirstWord()
+        
         function clearphoto() {
             var canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement;
             var photo: HTMLImageElement = document.getElementById('photo') as HTMLImageElement;
