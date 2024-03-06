@@ -38,25 +38,25 @@ export default function Quiz() {
             const blob = await response.blob();
             const file = new File([blob], 'image.jpg', {type: blob.type});
 
-			const options = {
-				maxSizeMB: 1,
-				maxWidthOrHeight: 1920,
-				useWebWorker: true,
-			}
+			// const options = {
+			// 	maxSizeMB: 1,
+			// 	maxWidthOrHeight: 1920,
+			// 	useWebWorker: true,
+			// }
 			try {
-				setErrorMessage("Compressing images! (1/2)")
+				// setErrorMessage("Compressing images! (1/2)")
 
-				const compressed_file = await imageCompression(file, options);
+				// const compressed_file = await imageCompression(file, options);
 
 				// compressed files lose file type info for some reason; recover file type info below.
 
-				const named_compressed_file = new File(
-						[await compressed_file.arrayBuffer()], 
-						file.name,
-						{type: file.type, lastModified: file.lastModified}
-					)
+				// const named_compressed_file = new File(
+				// 		[await compressed_file.arrayBuffer()], 
+				// 		file.name,
+				// 		{type: file.type, lastModified: file.lastModified}
+				// 	)
 
-				formData.set("image", named_compressed_file)
+				formData.set("image", file)
                 formData.set("quiz_id", localStorage.getItem("quiz_id")!)
                 formData.set("name", localStorage.getItem("name")!)
                 formData.set("word", word)

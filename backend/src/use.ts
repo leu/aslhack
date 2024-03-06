@@ -69,13 +69,13 @@ module.exports = function (app: Application) {
         const image = files[0]
         fs.writeFileSync('./temp.jpg', image.buffer);
 
-        const { stdout, stderr } = await exec('python3.11 ./predictor.py')
+        const { stdout, stderr } = await exec('python3 ./predictor.py')
 
         const outputs = fs.readFileSync('./myfile.txt', 'utf-8');
         console.log(outputs);
 
         // check word and file against model
-        const correct = Math.random() < 0.5
+        const correct = outputs.toLowerCase() == req.body.word.toLowerCase()
 
         let scores = (await sql`
             SELECT * FROM scores WHERE quiz_id = ${req.body.quiz_id} AND student = ${req.body.name}

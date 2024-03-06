@@ -50,6 +50,7 @@ export default function QuizSetup() {
                         <MenuItem value="C">C</MenuItem>
                         <MenuItem value="D">D</MenuItem>
                         <MenuItem value="E">E</MenuItem>
+                        <MenuItem value="Help">Help</MenuItem>
                         <MenuItem value="I love you">I love you</MenuItem>
                         <MenuItem value="Water">Water</MenuItem>
                         <MenuItem value="Why">Why</MenuItem>

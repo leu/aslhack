@@ -44,6 +44,7 @@ savedModel = load_model('cnn_model_keras2.h5')
 
 img = cv2.imread("temp.jpg")
 processed, contours, thresh = process(img)
+cv2.imwrite("heatmap.jpg", thresh)
 contour = max(contours, key = cv2.contourArea)
 x1, y1, w1, h1 = cv2.boundingRect(contour)
 save_img = thresh[y1:y1+h1, x1:x1+w1]
@@ -51,6 +52,7 @@ if w1 > h1:
     save_img = cv2.copyMakeBorder(save_img, int((w1-h1)/2) , int((w1-h1)/2) , 0, 0, cv2.BORDER_CONSTANT, (0, 0, 0))
 elif h1 > w1:
     save_img = cv2.copyMakeBorder(save_img, 0, 0, int((h1-w1)/2) , int((h1-w1)/2) , cv2.BORDER_CONSTANT, (0, 0, 0))
+
 pred_probab, pred_class = keras_predict(savedModel, save_img)
 text = CLASSES[pred_class]
 
